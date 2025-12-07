@@ -255,19 +255,15 @@ def update_activity(client, existing_activity, new_activity):
 def main():
     load_dotenv()
 
-    # Initialize Garmin and Notion clients using environment variables
-    garmin_email = os.getenv("GARMIN_EMAIL")
-    garmin_password = os.getenv("GARMIN_PASSWORD")
+    # Initialize Notion client
     notion_token = os.getenv("NOTION_TOKEN")
     database_id = os.getenv("NOTION_DB_ID")
+    client = Client(auth=notion_token)
 
-    # Initialize Garmin client and login
-    # Initialize Garmin using session.json (no password login)
-    #GPT Edit
-garmin = Garmin(session_data="MTgzMTI3NDMtZTRmYy00MDc4LTllNzgtZWZjOTMzYmY3OTkw")
-garmin.login()
+    # Initialize Garmin using local session token (no email/password)
+    garmin = Garmin(session_data="./session.json")
+    garmin.login()
 
-    
     # Get all activities
     activities = get_all_activities(garmin)
 
@@ -279,17 +275,15 @@ garmin.login()
             activity.get('activityType', {}).get('typeKey', 'Unknown'),
             activity_name
         )
-        
+
         # Check if activity already exists in Notion
         existing_activity = activity_exists(client, database_id, activity_date, activity_type, activity_name)
-        
+
         if existing_activity:
             if activity_needs_update(existing_activity, activity):
                 update_activity(client, existing_activity, activity)
-                # print(f"Updated: {activity_type} - {activity_name}")
         else:
             create_activity(client, database_id, activity)
-            # print(f"Created: {activity_type} - {activity_name}")
 
 if __name__ == '__main__':
     main()
