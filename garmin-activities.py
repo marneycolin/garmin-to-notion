@@ -264,7 +264,7 @@ def main():
     # Initialize Garmin client and login
     # Initialize Garmin using session.json (no password login)
     #GPT Edit
-garmin = Garmin(session_data="./session.json")
+garmin = Garmin(session_data="MTgzMTI3NDMtZTRmYy00MDc4LTllNzgtZWZjOTMzYmY3OTkw")
 garmin.login()
 
     
