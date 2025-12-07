@@ -262,9 +262,11 @@ def main():
     database_id = os.getenv("NOTION_DB_ID")
 
     # Initialize Garmin client and login
-    garmin = Garmin(garmin_email, garmin_password)
-    garmin.login()
-    client = Client(auth=notion_token)
+    # Initialize Garmin using session.json (no password login)
+    #GPT Edit
+garmin = Garmin(session_data="./session.json")
+garmin.login()
+
     
     # Get all activities
     activities = get_all_activities(garmin)
